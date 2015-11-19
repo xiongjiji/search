@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="/bower_components/angular/angular.min.js"></script>
+  </head>
+  <body>
+    	<div class="containner" ng-app='app' ng-controller='ctrl'>
+    		<div class="row">
+    			<div class="col-xs-4 col-xs-offset-4">
+    				<form action="">
+    					<div class="form-group">
+    						姓名：<input type="text" class="form-control" ng-model="rule" ng-change="switch()">
+    					</div>
+    					<div class="form-group" ng-show="show">
+    						<div ng-repeat="x in people | filter:rule" class="list-item">
+    							{{ x.name +'-' + x.age}}
+    						</div>
+    					</div>
+    				</form>
+    			</div>
+    		</div>
+    	</div>
+    <script>
+    	var app = angular.module('app',[]);
+    	var peopleArray = []
+    	app.controller('ctrl',['$scope','$http',function($scope,$http){
+    		$scope.peole = [];
+    		$scope.show =false;
+    		$scope.rule = "";
+    		$scope.switch = function(){
+    			if($scope.rule.length>0){
+    			$scope.show = true;
+    			$scope.people = peopleArray
+	    		}else{
+	    			$scope.show = false;
+	    			$scope.people = []
+	    		}
+    		}
+
+    		$http({
+    			method:'get',
+    			url:'data/data.json'
+    		}).then(function succesCallback(res){
+    			res.data.people.forEach(function(i){
+    				peopleArray.push(i)
+    			})
+
+    		})
+    	}])
+
+    </script>
+  </body>
+</html>
